@@ -46,7 +46,8 @@ mybatis:
   type-aliases-package: com.lcomputerstudy.example.domain
   mapper-locations: mapper/**/*.xml
       
-
+logging:
+  config: classpath:logback-spring.xml
   
   
   

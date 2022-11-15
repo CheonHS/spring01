@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.and()
 		
 		// csrf
-		.csrf();
+		.csrf().disable();
 	}
 	
 	@Bean
