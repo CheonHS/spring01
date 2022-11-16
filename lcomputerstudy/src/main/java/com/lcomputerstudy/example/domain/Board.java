@@ -5,7 +5,9 @@ public class Board {
 	private String bTitle;
 	private String bContent;
 	private String bWriter;
-	private String bDataTime;
+	private String bDateTime;
+	
+	private int rownum;
 	
 	public int getbId() {
 		return bId;
@@ -31,11 +33,17 @@ public class Board {
 	public void setbWriter(String bWriter) {
 		this.bWriter = bWriter;
 	}
-	public String getbDataTime() {
-		return bDataTime;
+	public String getbDateTime() {
+		return bDateTime;
 	}
-	public void setbDataTime(String bDataTime) {
-		this.bDataTime = bDataTime;
+	public void setbDateTime(String bDataTime) {
+		this.bDateTime = bDataTime;
+	}
+	public int getRownum() {
+		return rownum;
+	}
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
 	}
 	
 	

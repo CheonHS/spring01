@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Home page</title>
 </head>
 <body>
 	<h1>Home page</h1>
@@ -27,6 +27,12 @@
 			<sec:authorize access="isAuthenticated()">
 				<a href="/user/info">내 정보</a>
 				<a href="/admin">관리자</a>
+			</sec:authorize>
+		</div>
+		<br>
+		<div>
+			<sec:authorize access="permitAll">
+				<a href="/board">게시판</a>
 			</sec:authorize>
 		</div>
 </body>

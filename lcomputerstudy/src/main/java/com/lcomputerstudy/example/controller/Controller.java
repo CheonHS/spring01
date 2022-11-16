@@ -10,6 +10,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lcomputerstudy.example.domain.Board;
 import com.lcomputerstudy.example.domain.User;
 import com.lcomputerstudy.example.service.BoardService;
@@ -24,13 +26,7 @@ public class Controller {
 	@Autowired BoardService boardservice;
 	
 	@RequestMapping("/")
-	public String home(Model model) {
-		
-		List<Board> list = boardservice.selectBoardList();
-		model.addAttribute("list", list);
-		logger.debug("debug");
-		logger.info("info");
-		logger.error("error");
+	public String home(Model model) {		
 		return "/index";
 	}
 	
@@ -82,5 +78,24 @@ public class Controller {
 	@RequestMapping(value="/denied")
 		public String denied(Model model) {
 			return "/denied";
+	}
+	
+	//	board
+	
+	@RequestMapping(value="/board")
+	public String boardList(Model model) {
+		List<Board> list = boardservice.selectBoardList();
+		model.addAttribute("list", list);
+		logger.debug("debug");
+		logger.info("info");
+		logger.error("error");
+		return "/board_list";
+	}
+	@RequestMapping(value="/board/detail")
+	public String boardDetail(@RequestParam("bId") String bId, Model model) {
+//		int bId = (int)model.getAttribute("bId");
+		Board row = boardservice.selectBoardRow(Integer.parseInt(bId));
+		model.addAttribute("row", row);
+		return "/board_detail";
 	}
 }

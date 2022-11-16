@@ -5,4 +5,7 @@ import com.lcomputerstudy.example.domain.Board;
 
 public interface BoardService {
 	public List<Board> selectBoardList();
+	
+	public Board selectBoardRow(int bId);
+	
 }
