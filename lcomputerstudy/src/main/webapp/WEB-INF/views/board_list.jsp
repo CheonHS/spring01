@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,8 +10,10 @@
 <style>
 	table{
 		border-collapse: collapse;
+		font-size: 1px;
+		font-weight: bold;
 	}
-	th,td{
+	th, td{
 		height: 30px;
 	}
 	td:nth-child(1) {
@@ -35,11 +38,22 @@
 	.bRow:hover td:nth-child(2){
 		text-decoration: underline;
 	}
+	#tableDiv{
+		border: 1px solid black;
+		width: 700px;
+		height: 350px;
+	}
+	#paginationDiv{
+		border: 1px solid black;
+		width: 700px;
+		height: 30px;
+	}
 </style>
 </head>
 <body>
 	<h1>게시판</h1>
 	<hr>
+	<div id="tableDiv">
 		<table>
 			<tr>
 				<th colspan="2">제목</th>
@@ -55,5 +69,16 @@
 		      	</tr>
 	     	</c:forEach>
      	</table>
+     </div>
+     <div id="paginationDiv">
+     	
+     </div>
+     <br>
+     <sec:authorize access="isAuthenticated()">
+		 <a href="/board/write">글 작성</a>
+	 </sec:authorize>
+     <br>
+     <a href="/">돌아기기</a>
+
 </body>
 </html>

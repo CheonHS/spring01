@@ -91,11 +91,18 @@ public class Controller {
 		logger.error("error");
 		return "/board_list";
 	}
+	
 	@RequestMapping(value="/board/detail")
 	public String boardDetail(@RequestParam("bId") String bId, Model model) {
 //		int bId = (int)model.getAttribute("bId");
 		Board row = boardservice.selectBoardRow(Integer.parseInt(bId));
 		model.addAttribute("row", row);
 		return "/board_detail";
+	}
+	
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
+	@RequestMapping(value="/board/write")
+	public String boardWrite(Model model) {
+		return "/board_write";
 	}
 }
