@@ -10,7 +10,7 @@
 <style>
 	table{
 		border-collapse: collapse;
-		font-size: 1px;
+		font-size: 0.8em;
 		font-weight: bold;
 	}
 	th, td{
@@ -69,16 +69,15 @@
 		      	</tr>
 	     	</c:forEach>
      	</table>
-     </div>
-     <div id="paginationDiv">
+    </div>
+    <div id="paginationDiv">
      	
-     </div>
-     <br>
-     <sec:authorize access="isAuthenticated()">
-		 <a href="/board/write">글 작성</a>
-	 </sec:authorize>
-     <br>
-     <a href="/">돌아기기</a>
+    </div>
+    <br>
+	<a href="/board/write">글 작성</a>
+	
+    <br>
+    <a href="/">돌아기기</a>
 
 </body>
 </html>

@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcomputerstudy.example.mapper.BoardMapper">
+
+	<!-- 게시판 목록 -->
 	<select id="selectBoardList" resultType="Board">
+		SELECT		@rownum:=@rownum+1 as rownum,
+					ta.b_id as bId,
+					ta.b_title as bTitle,
+					ta.b_content as bContent,
+					ta.b_writer as bWriter,
+					ta.b_datetime as bDateTime
+			
+		FROM 		lc_board ta
+		INNER JOIN	(SELECT @rownum:=0 FROM lc_board ta) tb
+		GROUP BY	ta.b_id
+		ORDER BY	ta.b_id DESC
+	
+	<!-- 
 		SELECT		@rownum := @rownum -1 as rownum,
 					ta.b_id as bId,
 					ta.b_title as bTitle,
@@ -10,7 +25,8 @@
 					ta.b_datetime as bDateTime
 		
 		FROM 		lc_board ta
-		INNER JOIN (SELECT @rownum := (SELECT COUNT(*)+1 FROM lc_board ta)) tb
+		INNER JOIN (SELECT @rownum := (SELECT COUNT(*)+1 FROM lc_board ta ORDER BY ta.b_id DESC)) tb
+	 -->
 		
 	<!--
 		SELECT		ROWNUM() as rownum,
@@ -22,15 +38,42 @@
 		FROM		lc_board
 	 -->	
 	</select>
-	<select id="selectBoardRow" resultType="Board">
-		SELECT		@rownum := @rownum -1 as rownum,
-					ta.b_id as bId,
+	
+	<!-- 게시판 상세 -->
+	<select id="selectBoardRow" parameterType="Board" resultType="Board">
+		SELECT		ta.b_id as bId,
 					ta.b_title as bTitle,
 					ta.b_content as bContent,
 					ta.b_writer as bWriter,
 					ta.b_datetime as bDateTime
 		FROM		lc_board ta
-		INNER JOIN (SELECT @rownum := (SELECT COUNT(*)+1 FROM lc_board ta)) tb
 		WHERE		ta.b_id = #{bId}
 	</select>
+	
+	<!-- 게시판 작성 -->
+	<insert id="writeBoard" parameterType="Board">
+		INSERT INTO lc_board(
+			b_title,
+			b_content,
+			b_writer
+		) VALUES (
+			#{bTitle},
+	        #{bContent},
+	        #{bWriter}
+		)
+		<selectKey resultType="int" keyProperty="bId" order="AFTER">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>     
+	</insert>
+	<update id="updateBoard" parameterType="Board">
+		UPDATE		lc_board
+		SET			b_title = #{bTitle},
+					b_content = #{bContent}
+		WHERE 		b_id = #{bId}     
+	</update>
+	<delete id="deleteBoard" parameterType="Board">
+		DELETE FROM	lc_board
+		WHERE		b_id = #{bId}
+	</delete>
+
 </mapper>

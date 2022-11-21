@@ -95,7 +95,9 @@ public class Controller {
 	@RequestMapping(value="/board/detail")
 	public String boardDetail(@RequestParam("bId") String bId, Model model) {
 //		int bId = (int)model.getAttribute("bId");
-		Board row = boardservice.selectBoardRow(Integer.parseInt(bId));
+		Board row = new Board();
+		row.setbId(Integer.parseInt(bId));
+		row = boardservice.selectBoardRow(row);
 		model.addAttribute("row", row);
 		return "/board_detail";
 	}
@@ -105,4 +107,45 @@ public class Controller {
 	public String boardWrite(Model model) {
 		return "/board_write";
 	}
+	
+	@RequestMapping(value="/board/writePro")
+	public String boardWritePro(Board board, Model model) {
+		boardservice.writeBoard(board);
+		String bId = Integer.toString(board.getbId());
+		return boardDetail(bId, model);
+	}
+	
+	@RequestMapping(value="/board/update")
+	public String boardUpdate(@RequestParam("bId") String bId, Model model) {
+		Board row = new Board();
+		row.setbId(Integer.parseInt(bId));
+		row = boardservice.selectBoardRow(row);
+		model.addAttribute("row", row);
+		return "/board_update";
+	}
+	
+	@RequestMapping(value="/board/updatePro")
+	public String boardUpdatePro(Board board, Model model) {
+		boardservice.updateBoard(board);
+		String bId = Integer.toString(board.getbId());
+		return boardDetail(bId, model);
+	}
+	
+	@RequestMapping(value="/board/delete")
+	public String boardUpdatePro(@RequestParam("bId") String bId, Model model) {
+		Board row = new Board();
+		row.setbId(Integer.parseInt(bId));
+		boardservice.deleteBoard(row);
+		return boardList(model);
+	}
+	
+	@RequestMapping(value="/board/reply")
+	public String boardReply(@RequestParam("bId") String bId, Model model) {
+		Board row = new Board();
+		row.setbId(Integer.parseInt(bId));
+		row = boardservice.selectBoardRow(row);
+		model.addAttribute("row", row);
+		return "/board_reply";
+	}
+	
 }

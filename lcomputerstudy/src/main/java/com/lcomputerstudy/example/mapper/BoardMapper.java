@@ -8,5 +8,11 @@ import com.lcomputerstudy.example.domain.Board;
 public interface BoardMapper {
 	public List<Board> selectBoardList();
 
-	public Board selectBoardRow(int bId);
+	public Board selectBoardRow(Board board);
+
+	public void writeBoard(Board board);
+
+	public void updateBoard(Board board);
+
+	public void deleteBoard(Board board);
 }

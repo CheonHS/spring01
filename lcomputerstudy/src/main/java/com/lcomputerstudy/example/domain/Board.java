@@ -8,6 +8,10 @@ public class Board {
 	private String bDateTime;
 	
 	private int rownum;
+
+	private int bGroup;
+	private int bOrder;
+	private int bDepth;
 	
 	public int getbId() {
 		return bId;
@@ -45,6 +49,23 @@ public class Board {
 	public void setRownum(int rownum) {
 		this.rownum = rownum;
 	}
-	
+	public int getbGroup() {
+		return bGroup;
+	}
+	public void setbGroup(int bGroup) {
+		this.bGroup = bGroup;
+	}
+	public int getbOrder() {
+		return bOrder;
+	}
+	public void setbOrder(int bOrder) {
+		this.bOrder = bOrder;
+	}
+	public int getbDeoth() {
+		return bDepth;
+	}
+	public void setbDeoth(int bDeoth) {
+		this.bDepth = bDeoth;
+	}
 	
 }

@@ -17,8 +17,25 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Board selectBoardRow(int bId) {
-		return boardmapper.selectBoardRow(bId);
+	public Board selectBoardRow(Board board) {
+		return boardmapper.selectBoardRow(board);
+	}
+
+	@Override
+	public void writeBoard(Board board) {
+		boardmapper.writeBoard(board);
+	}
+
+	@Override
+	public void updateBoard(Board board) {
+		boardmapper.updateBoard(board);
+		
+	}
+
+	@Override
+	public void deleteBoard(Board board) {
+		boardmapper.deleteBoard(board);
+		
 	}
 	
 }
