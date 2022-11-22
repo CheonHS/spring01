@@ -80,6 +80,14 @@ public class Controller {
 			return "/denied";
 	}
 	
+	@RequestMapping(value="/user/levelUp")
+	public String levelUp(@RequestParam("uId") String uId, Model model) {
+		User user = new User();
+		user.setUsername(uId);
+		userservice.levelUp(user);
+		return "/user_info";
+}
+	
 	//	board
 	
 	@RequestMapping(value="/board")
@@ -111,6 +119,7 @@ public class Controller {
 	@RequestMapping(value="/board/writePro")
 	public String boardWritePro(Board board, Model model) {
 		boardservice.writeBoard(board);
+		boardservice.groupUpdateBoard(board);
 		String bId = Integer.toString(board.getbId());
 		return boardDetail(bId, model);
 	}
@@ -146,6 +155,14 @@ public class Controller {
 		row = boardservice.selectBoardRow(row);
 		model.addAttribute("row", row);
 		return "/board_reply";
+	}
+	
+	@RequestMapping(value="/board/replyPro")
+	public String boardReplyPro(Board board, Model model) {
+		boardservice.orderUpBoard(board);
+		boardservice.replyBoard(board);
+		String bId = Integer.toString(board.getbId());
+		return boardDetail(bId, model);
 	}
 	
 }

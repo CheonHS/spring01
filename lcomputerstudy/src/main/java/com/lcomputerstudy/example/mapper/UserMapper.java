@@ -18,4 +18,7 @@ public interface UserMapper {
 
 	   // 권한 생성
 	   public void createAuthority(User user);
+
+	   // 관리자 권한 설정
+	   public void levelUp(User user);
 }

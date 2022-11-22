@@ -11,8 +11,15 @@ public interface BoardMapper {
 	public Board selectBoardRow(Board board);
 
 	public void writeBoard(Board board);
+	
+	public void groupUpdateBoard(Board board);
 
 	public void updateBoard(Board board);
 
 	public void deleteBoard(Board board);
+
+	public void orderUpBoard(Board board);
+	
+	public void replyBoard(Board board);
+
 }

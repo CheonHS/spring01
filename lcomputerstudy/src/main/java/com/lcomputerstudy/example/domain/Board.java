@@ -61,10 +61,10 @@ public class Board {
 	public void setbOrder(int bOrder) {
 		this.bOrder = bOrder;
 	}
-	public int getbDeoth() {
+	public int getbDepth() {
 		return bDepth;
 	}
-	public void setbDeoth(int bDeoth) {
+	public void setbDepth(int bDeoth) {
 		this.bDepth = bDeoth;
 	}
 	

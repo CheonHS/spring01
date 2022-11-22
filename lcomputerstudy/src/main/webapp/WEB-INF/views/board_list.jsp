@@ -1,12 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>°Ô½ÃÆÇ</title>
+<meta charset="UTF-8">
+<title>ê²Œì‹œíŒ</title>
 <style>
 	table{
 		border-collapse: collapse;
@@ -39,45 +39,50 @@
 		text-decoration: underline;
 	}
 	#tableDiv{
-		border: 1px solid black;
 		width: 700px;
 		height: 350px;
 	}
 	#paginationDiv{
-		border: 1px solid black;
 		width: 700px;
 		height: 30px;
 	}
 </style>
 </head>
 <body>
-	<h1>°Ô½ÃÆÇ</h1>
+	<h1>ê²Œì‹œíŒ</h1>
 	<hr>
-	<div id="tableDiv">
-		<table>
-			<tr>
-				<th colspan="2">Á¦¸ñ</th>
-				<th>ÀÛ¼ºÀÚ</th>
-				<th>ÀÛ¼ºÀÏ</th>
-			</tr>
-			<c:forEach var="list" items="${list }">
-		      	<tr class="bRow" onclick="location.href='/board/detail?bId=${list.bId}'">
-		      		<td>${list.rownum }</td>
-		      		<td>${list.bTitle }</td>
-		      		<td>${list.bWriter }</td>
-		      		<td>${list.bDateTime }</td>
-		      	</tr>
-	     	</c:forEach>
-     	</table>
+	<div id="tableDiv" align="center">
+		<c:if test="${empty list}">ê²Œì‹œê¸€ì´ ì—†ìŠµë‹ˆë‹¤.</c:if>
+		<c:if test="${!empty list}">
+			<table>
+				<tr>
+					<th colspan="2">ì œëª©</th>
+					<th>ì‘ì„±ì</th>
+					<th>ì‘ì„±ì¼</th>
+				</tr>
+				<c:forEach var="list" items="${list }">
+			      	<tr class="bRow" onclick="location.href='/board/detail?bId=${list.bId}'">
+			      		<td>${list.rownum }</td>
+			      		<td>
+			      			<c:if test="${list.bDepth ne 0 }">â””</c:if>
+			      			<c:forEach begin="1" end="${list.bDepth }" step="1">â”€</c:forEach>
+			      			${list.bTitle }
+			      		</td>
+			      		<td>${list.bWriter }</td>
+			      		<td>${list.bDateTime }</td>
+			      	</tr>
+		     	</c:forEach>
+	     	</table>
+     	</c:if>
     </div>
     <div id="paginationDiv">
      	
     </div>
     <br>
-	<a href="/board/write">±Û ÀÛ¼º</a>
+	<a href="/board/write">ê¸€ ì‘ì„±</a>
 	
     <br>
-    <a href="/">µ¹¾Æ±â±â</a>
+    <a href="/">ëŒì•„ê¸°ê¸°</a>
 
 </body>
 </html>

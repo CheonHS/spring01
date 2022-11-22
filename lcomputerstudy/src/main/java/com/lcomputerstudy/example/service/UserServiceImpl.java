@@ -46,6 +46,12 @@ public class UserServiceImpl implements UserService{
 		return userMapper.readUser(username);
 	}
 
+	@Override
+	public void levelUp(User user) {
+		userMapper.levelUp(user);
+		
+	}
+
 
 
 }

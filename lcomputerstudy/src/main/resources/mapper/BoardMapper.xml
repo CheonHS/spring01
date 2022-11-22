@@ -9,12 +9,15 @@
 					ta.b_title as bTitle,
 					ta.b_content as bContent,
 					ta.b_writer as bWriter,
-					ta.b_datetime as bDateTime
+					ta.b_datetime as bDateTime,
+					ta.b_group as bGroup,
+					ta.b_order as bOrder,
+					ta.b_depth as bDepth
 			
 		FROM 		lc_board ta
 		INNER JOIN	(SELECT @rownum:=0 FROM lc_board ta) tb
 		GROUP BY	ta.b_id
-		ORDER BY	ta.b_id DESC
+		ORDER BY	bGroup DESC, bOrder ASC
 	
 	<!-- 
 		SELECT		@rownum := @rownum -1 as rownum,
@@ -45,7 +48,10 @@
 					ta.b_title as bTitle,
 					ta.b_content as bContent,
 					ta.b_writer as bWriter,
-					ta.b_datetime as bDateTime
+					ta.b_datetime as bDateTime,
+					ta.b_group as bGroup,
+					ta.b_order as bOrder,
+					ta.b_depth as bDepth
 		FROM		lc_board ta
 		WHERE		ta.b_id = #{bId}
 	</select>
@@ -55,25 +61,65 @@
 		INSERT INTO lc_board(
 			b_title,
 			b_content,
-			b_writer
+			b_writer,
+			b_group,
+			b_order,
+			b_depth
 		) VALUES (
 			#{bTitle},
 	        #{bContent},
-	        #{bWriter}
+	        #{bWriter},
+	        '0',
+	        '1',
+	        '0'
 		)
 		<selectKey resultType="int" keyProperty="bId" order="AFTER">
         	SELECT LAST_INSERT_ID()
     	</selectKey>     
 	</insert>
+	<update id="groupUpdateBoard" parameterType="Board">			
+		UPDATE		lc_board
+		SET			b_group = b_id
+		WHERE		b_id = LAST_INSERT_ID()
+		 
+	</update>
+	
 	<update id="updateBoard" parameterType="Board">
 		UPDATE		lc_board
 		SET			b_title = #{bTitle},
 					b_content = #{bContent}
 		WHERE 		b_id = #{bId}     
 	</update>
+	
 	<delete id="deleteBoard" parameterType="Board">
 		DELETE FROM	lc_board
 		WHERE		b_id = #{bId}
 	</delete>
+	
+	<update id="orderUpBoard" parameterType="Board">
+		UPDATE		lc_board
+		SET			b_order = b_order+1
+		WHERE 		b_group = #{bGroup} AND b_order != '1' AND	b_order != #{bOrder}
+	</update>
+	<insert id="replyBoard" parameterType="Board">
+		INSERT INTO lc_board(
+			b_title,
+			b_content,
+			b_writer,
+			b_group,
+			b_order,
+			b_depth
+		) VALUES (
+			#{bTitle},
+	        #{bContent},
+	        #{bWriter},
+	        #{bGroup},
+	        #{bOrder}+1,
+	        #{bDepth}+1
+		)
+		<selectKey resultType="int" keyProperty="bId" order="AFTER">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>     
+	</insert>
 
 </mapper>

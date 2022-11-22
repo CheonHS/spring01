@@ -25,6 +25,11 @@ public class BoardServiceImpl implements BoardService {
 	public void writeBoard(Board board) {
 		boardmapper.writeBoard(board);
 	}
+	
+	@Override
+	public void groupUpdateBoard(Board board) {
+		boardmapper.groupUpdateBoard(board);
+	}
 
 	@Override
 	public void updateBoard(Board board) {
@@ -37,5 +42,19 @@ public class BoardServiceImpl implements BoardService {
 		boardmapper.deleteBoard(board);
 		
 	}
+
+	@Override
+	public void orderUpBoard(Board board) {
+		boardmapper.orderUpBoard(board);
+		
+	}
+	
+	@Override
+	public void replyBoard(Board board) {
+		boardmapper.replyBoard(board);
+		
+	}
+
+
 	
 }
