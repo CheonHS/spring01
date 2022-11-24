@@ -9,10 +9,12 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lcomputerstudy.example.domain.Board;
+import com.lcomputerstudy.example.domain.Pagination;
 import com.lcomputerstudy.example.domain.User;
 import com.lcomputerstudy.example.service.BoardService;
 import com.lcomputerstudy.example.service.UserService;
@@ -24,6 +26,8 @@ public class Controller {
 
 	@Autowired UserService userservice;
 	@Autowired BoardService boardservice;
+	
+	Pagination pagination = null;
 	
 	@RequestMapping("/")
 	public String home(Model model) {		
@@ -62,12 +66,6 @@ public class Controller {
 		public String beforeLogin(Model model) {
 			return "/login";
 	}
-	
-	@Secured({"ROLE_ADMIN"})
-	@RequestMapping(value="/admin")
-		public String admin(Model model) {
-			return "/admin";
-	}
 
 	@Secured({"ROLE_USER"})
 	@RequestMapping(value="/user/info")
@@ -87,12 +85,51 @@ public class Controller {
 		userservice.levelUp(user);
 		return "/user_info";
 }
+	//	admin
+	
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value="/admin")
+		public String admin(Model model) {
+			return "/admin";
+	}
+	@Secured({"ROLE_ADMIN"})
+	@RequestMapping(value="/admin/userList")
+	public String userList(@ModelAttribute Pagination page, Model model) {
+		
+		pagination = new Pagination();
+		if(Integer.toString(page.getPage())!="") {
+			pagination.setPage(page.getPage());
+		}
+		pagination.setCount(userservice.getCountUser());
+		pagination.init();
+		
+		List<User> list = userservice.selectUserList(pagination);
+		
+		model.addAttribute("page", pagination);
+		model.addAttribute("list", list);
+		logger.debug("debug");
+		logger.info("info");
+		logger.error("error");
+	
+		return "/user_list";
+	}
+
 	
 	//	board
 	
 	@RequestMapping(value="/board")
-	public String boardList(Model model) {
-		List<Board> list = boardservice.selectBoardList();
+	public String boardList(@ModelAttribute Pagination page, Model model) {
+		
+		pagination = new Pagination();
+		if(Integer.toString(page.getPage())!="") {
+			pagination.setPage(page.getPage());
+		}
+		pagination.setCount(boardservice.getCountBoard());
+		pagination.init();
+		
+		List<Board> list = boardservice.selectBoardList(pagination);
+		
+		model.addAttribute("page", pagination);
 		model.addAttribute("list", list);
 		logger.debug("debug");
 		logger.info("info");
@@ -101,11 +138,9 @@ public class Controller {
 	}
 	
 	@RequestMapping(value="/board/detail")
-	public String boardDetail(@RequestParam("bId") String bId, Model model) {
-//		int bId = (int)model.getAttribute("bId");
-		Board row = new Board();
-		row.setbId(Integer.parseInt(bId));
-		row = boardservice.selectBoardRow(row);
+//	public String boardDetail(@RequestParam("bId") String bId, Model model) {
+	public String boardDetail(@ModelAttribute Board board, Model model) {
+		Board row = boardservice.selectBoardRow(board);
 		model.addAttribute("row", row);
 		return "/board_detail";
 	}
@@ -120,8 +155,7 @@ public class Controller {
 	public String boardWritePro(Board board, Model model) {
 		boardservice.writeBoard(board);
 		boardservice.groupUpdateBoard(board);
-		String bId = Integer.toString(board.getbId());
-		return boardDetail(bId, model);
+		return boardDetail(board, model);
 	}
 	
 	@RequestMapping(value="/board/update")
@@ -136,23 +170,19 @@ public class Controller {
 	@RequestMapping(value="/board/updatePro")
 	public String boardUpdatePro(Board board, Model model) {
 		boardservice.updateBoard(board);
-		String bId = Integer.toString(board.getbId());
-		return boardDetail(bId, model);
+		return boardDetail(board, model);
 	}
 	
 	@RequestMapping(value="/board/delete")
-	public String boardUpdatePro(@RequestParam("bId") String bId, Model model) {
-		Board row = new Board();
-		row.setbId(Integer.parseInt(bId));
-		boardservice.deleteBoard(row);
-		return boardList(model);
+	public String boardDelete(@ModelAttribute Board board, Model model) {
+		boardservice.deleteBoard(board);
+		pagination = new Pagination();
+		return boardList(pagination, model);
 	}
 	
 	@RequestMapping(value="/board/reply")
-	public String boardReply(@RequestParam("bId") String bId, Model model) {
-		Board row = new Board();
-		row.setbId(Integer.parseInt(bId));
-		row = boardservice.selectBoardRow(row);
+	public String boardReply(@ModelAttribute Board board, Model model) {
+		Board row = boardservice.selectBoardRow(board);
 		model.addAttribute("row", row);
 		return "/board_reply";
 	}
@@ -161,8 +191,7 @@ public class Controller {
 	public String boardReplyPro(Board board, Model model) {
 		boardservice.orderUpBoard(board);
 		boardservice.replyBoard(board);
-		String bId = Integer.toString(board.getbId());
-		return boardDetail(bId, model);
+		return boardDetail(board, model);
 	}
 	
 }

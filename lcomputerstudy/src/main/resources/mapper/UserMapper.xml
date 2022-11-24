@@ -61,4 +61,22 @@
     	SET			u_auth = 'ROLE_ADMIN'
     	WHERE		u_id = #{username}
     </update>
+    <!-- 유저 목록 -->
+    <select id="selectUserList" parameterType="Pagination" resultType="User">
+    	SELECT		ROW_NUMBER()
+					OVER(ORDER BY	u_datetime) as rownum,
+					u_id				as	username,
+					u_password			as	password,
+					u_name				as	uName,
+					u_datetime			as	uDateTime
+			
+		FROM 		lc_user
+		ORDER BY 	rownum desc
+		LIMIT 		#{pageNum}, #{perPage}
+    </select>
+    <!-- 유저 개수 -->
+    <select id="getCountUser" resultType="int">
+    	SELECT 		COUNT(*)
+    	FROM		lc_user
+    </select>
 </mapper>

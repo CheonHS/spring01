@@ -6,70 +6,57 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>게시판</title>
+<title>회원 목록</title>
 <style>
+	td, th{
+		text-align: center;
+		border: 1px solid black;
+	}
 	table{
 		border-collapse: collapse;
-		font-size: 0.8em;
 		font-weight: bold;
 	}
-	th, td{
-		height: 30px;
-	}
 	td:nth-child(1) {
-		text-align: center;
 		width: 50px;
 	}
 	td:nth-child(2) {
-		width: 300px;
-	}
-	td:nth-child(3) {
-		text-align: center;
 		width: 100px;
 	}
+	td:nth-child(3) {
+		width: 150px;
+	}
 	td:nth-child(4) {
-		text-align: center;
-		width: 200px;
-	}
-	.bRow{
-		border-top: 1px solid gray;
-		border-bottom: 1px solid gray;
-	}
-	.bRow:hover td:nth-child(2){
-		text-decoration: underline;
+		width: 250px;
 	}
 	#tableDiv{
-		width: 700px;
-		height: 220px;
+		width: 600px;
+		height: 150px;
 	}
 	#paginationDiv{
-		width: 700px;
+		width: 500px;
 		height: 30px;
 	}
 </style>
 </head>
 <body>
-	<h1>게시판</h1>
+	<h1>회원 목록</h1>
 	<hr>
 	<div id="tableDiv" align="center">
-		<c:if test="${empty list}">게시글이 없습니다.</c:if>
+		<c:if test="${empty list}">회원이 없습니다.</c:if>
 		<c:if test="${!empty list}">
 			<table>
 				<tr>
-					<th colspan="2">제목</th>
-					<th>작성자</th>
-					<th>작성일</th>
+					<th>No</th>
+					<th>ID</th>
+					<th>회원이름</th>
+					<th>가입일자</th>
 				</tr>
 				<c:forEach var="list" items="${list }">
-			      	<tr class="bRow" onclick="location.href='/board/detail?bId=${list.bId}'">
+			      	<tr class="uRow" onclick="location.href='/admin/userDetail?username=${list.username}'">
 			      		<td>${list.rownum }</td>
-			      		<td>
-			      			<c:if test="${list.bDepth ne 0 }">└</c:if>
-			      			<c:forEach begin="1" end="${list.bDepth }" step="1">─</c:forEach>
-			      			${list.bTitle }
-			      		</td>
-			      		<td>${list.bWriter }</td>
-			      		<td>${list.bDateTime }</td>
+			      		<td>${list.username }</td>
+			      		<td>${list.uName }</td>
+			      		<td>${list.uDateTime }</td>
 			      	</tr>
 		     	</c:forEach>
 	     	</table>
@@ -81,7 +68,7 @@
 				&ensp;
 			</c:when>
 			<c:when test="${ page.prevPage ge 5}">
-				<a href="/board?page=${page.prevPage}">◀</a>
+				<a href="/admin/userList?page=${page.prevPage}">◀</a>
 			</c:when>
 		</c:choose>
 		 
@@ -91,14 +78,14 @@
 					${i}
 				</c:when>
 				<c:when test="${ page.page ne i }">
-						<a href="/board?page=${i}">${i}</a>
+						<a href="/admin/userList?page=${i}">${i}</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
 		
 		<c:choose>
 			<c:when test="${ page.nextPage le page.lastPage }">
-				<a href="/board?page=${page.nextPage}">▶</a>
+				<a href="/admin/userList?page=${page.nextPage}">▶</a>
 			</c:when>
 			<c:when test="${ page.nextPage ge page.lastPage}">
 				&ensp;
@@ -106,10 +93,6 @@
 		</c:choose> 
     </div>
     <br>
-	<a href="/board/write">글 작성</a>
-	
-    <br>
-    <a href="/">돌아기기</a>
-
+    <a href="/admin">돌아기기</a>
 </body>
 </html>

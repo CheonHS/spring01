@@ -3,21 +3,21 @@
 <mapper namespace="com.lcomputerstudy.example.mapper.BoardMapper">
 
 	<!-- 게시판 목록 -->
-	<select id="selectBoardList" resultType="Board">
-		SELECT		@rownum:=@rownum+1 as rownum,
-					ta.b_id as bId,
-					ta.b_title as bTitle,
-					ta.b_content as bContent,
-					ta.b_writer as bWriter,
-					ta.b_datetime as bDateTime,
-					ta.b_group as bGroup,
-					ta.b_order as bOrder,
-					ta.b_depth as bDepth
+	<select id="selectBoardList" parameterType="Pagination" resultType="Board">
+		SELECT		ROW_NUMBER()
+					OVER(ORDER BY	b_group asc, b_order desc) as rownum,
+					b_id as bId,
+					b_title as bTitle,
+					b_content as bContent,
+					b_writer as bWriter,
+					b_datetime as bDateTime,
+					b_group as bGroup,
+					b_order as bOrder,
+					b_depth as bDepth
 			
-		FROM 		lc_board ta
-		INNER JOIN	(SELECT @rownum:=0 FROM lc_board ta) tb
-		GROUP BY	ta.b_id
-		ORDER BY	bGroup DESC, bOrder ASC
+		FROM 		lc_board
+		ORDER BY 	rownum desc
+		LIMIT 		#{pageNum}, #{perPage}
 	
 	<!-- 
 		SELECT		@rownum := @rownum -1 as rownum,
@@ -121,5 +121,11 @@
         	SELECT LAST_INSERT_ID()
     	</selectKey>     
 	</insert>
+	
+	<!-- 게시판 개수 -->
+	<select id="getCountBoard" resultType="int">
+		SELECT		COUNT(*)
+		FROM		lc_board
+	</select>
 
 </mapper>

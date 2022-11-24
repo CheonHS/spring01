@@ -21,7 +21,7 @@ public class User implements UserDetails {
 	private boolean isCredentialsNonExpired;
 	private boolean isEnabled;
 	
-	
+	private int rownum;
 	
 	public String getuName() {
 		return uName;
@@ -95,6 +95,14 @@ public class User implements UserDetails {
 				+ ", authorities=" + authorities + ", isAccountNonExpired=" + isAccountNonExpired
 				+ ", isAccountNonLocked=" + isAccountNonLocked + ", isCredentialsNonExpired=" + isCredentialsNonExpired
 				+ ", isEnabled=" + isEnabled + "]";
+	}
+	
+	
+	public int getRownum() {
+		return rownum;
+	}
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
 	}
 	
 

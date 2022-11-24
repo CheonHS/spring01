@@ -4,9 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>관리자 페이지</title>
 </head>
 <body>
 	<h1>관리자 페이지</h1>
+	<hr>
+	<a href="/admin/userList">회원 목록</a>
+	<br><br>
+	<a href="/">돌아기기</a>
 </body>
 </html>

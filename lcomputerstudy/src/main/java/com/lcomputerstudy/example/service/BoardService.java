@@ -2,11 +2,12 @@ package com.lcomputerstudy.example.service;
 
 import java.util.List;
 import com.lcomputerstudy.example.domain.Board;
+import com.lcomputerstudy.example.domain.Pagination;
 
 public interface BoardService {
 	
 	// 게시판 목록
-	public List<Board> selectBoardList();
+	public List<Board> selectBoardList(Pagination page);
 	
 	// 게시판 상세
 	public Board selectBoardRow(Board row);
@@ -28,5 +29,7 @@ public interface BoardService {
 	
 	// 게시판 답글
 	public void replyBoard(Board board);
+
+	public int getCountBoard();
 
 }

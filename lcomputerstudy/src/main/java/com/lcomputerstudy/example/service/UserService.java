@@ -1,9 +1,12 @@
 package com.lcomputerstudy.example.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import com.lcomputerstudy.example.domain.Pagination;
 import com.lcomputerstudy.example.domain.User;
 public interface UserService extends UserDetailsService{
 	
@@ -21,4 +24,10 @@ public interface UserService extends UserDetailsService{
 
 	// 관리자 권한 설정
 	public void levelUp(User user);
+
+	// 유저 목록
+	public List<User> selectUserList(Pagination page);
+
+	public int getCountUser();
+	
 }
