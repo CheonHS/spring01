@@ -1,12 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="EUC-KR">
-<title>Insert title here</title>
+<title>ê²Œì‹œíŒ ìƒì„¸</title>
 <style>
 	table{
 		width: 700px;
@@ -34,14 +33,43 @@
 	#contentTd{
 		height: 200px;
 	}
+	#commentWriteDiv{
+		
+		margin-top: 5px;
+		width: 700px;
+		height: 60px;
+	}
+	#commentListDiv{
+		border: 1px solid black;
+		width: 800px;
+	}
+	#cContent{
+		width: 630px;
+		height: 40px;
+		border: 1px solid black;
+		vertical-align: middle;
+	}
+	#cContent:focus {
+		outline: none;
+	}
+	.cContentList{
+		width: 630px;
+		height: 40px;
+		border: 1px solid black;
+		vertical-align: middle;
+	}
+	.cContentList:focus{
+		outline: none;
+	}
 </style>
+<script src="//code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
 <body>
-	<h1>°Ô½ÃÆÇ »ó¼¼</h1>
+	<h1>ê²Œì‹œíŒ ìƒì„¸</h1>
 	<hr>
 	<table>
 		<tr>
-			<th></th>
+			<th>${row.rownum }</th>
 			<th>${row.bTitle }</th>
 			<th>${row.bWriter}</th>
 		</tr>
@@ -52,12 +80,12 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<a href="/board/reply?bId=${row.bId }">´ä±Û</a>
+				<a href="/board/reply?bId=${row.bId }">ë‹µê¸€</a>
 				<sec:authorize access="isAuthenticated()">
 					<sec:authentication property="principal" var="principal"/>
 					<c:if test="${row.bWriter == principal.username}">
-						<a href="/board/update?bId=${row.bId }">¼öÁ¤</a>
-						<a href="/board/delete?bId=${row.bId }">»èÁ¦</a>
+						<a href="/board/update?bId=${row.bId }">ìˆ˜ì •</a>
+						<a href="/board/delete?bId=${row.bId }">ì‚­ì œ</a>
 					</c:if>
 				</sec:authorize>
 				
@@ -65,6 +93,53 @@
 			<td align="center"><b>${row.bDateTime }</b></td>
 		</tr>
 	</table>
-	<a href="/board">¸ñ·Ï</a>
+	<div id="commentWriteDiv" align="left">
+		<form action="/comment/write" method="post">
+			<input type="hidden" name="bId" id="bId" value="${row.bId }">
+			<sec:authorize access="isAuthenticated()">
+				<sec:authentication property="principal" var="principal"/>
+				<input type="hidden" name="cWriter" id="cWriter" value="${principal.username }">
+			</sec:authorize>
+			<textarea name="cContent" id="cContent" rows="2"></textarea>
+			<input type="button" value="ë“±ë¡" id="btnCommentWrite" style="height: 40px;">
+		</form>
+	</div>
+	<div id="commentListDiv" align="left">
+		<c:if test="${empty list}">ëŒ“ê¸€ì´ ì—†ìŠµë‹ˆë‹¤.</c:if>
+		<c:if test="${!empty list}">
+	    	<c:forEach var="list" items="${list }">
+		    	<div>
+		    		<div style="font-size: 0.8em; margin-left:10px; margin-right: 10px; margin-top: 10px;">
+						${list.cWriter } / ${list.cDateTime }
+					</div>
+					<textarea name="cContent" class="cContentList" rows="2" readonly>${list.cContent }</textarea>
+					<input type="button" value="ë‹µê¸€" id="btnCommentReply" style="height: 40px;">
+					<input type="button" value="ìˆ˜ì •" id="btnCommentEdit" style="height: 40px;">
+					<input type="button" value="ì‚­ì œ" id="btnCommentDelete" style="height: 40px;">
+					
+		    	</div>
+	    	</c:forEach>
+	    </c:if>
+    </div>
+	<a href="/board">ëª©ë¡</a>
 </body>
+<script>
+	$(document).on('click', '#btnCommentWrite', function () {
+		let content = $('#cContent').val();
+		let bId = $('#bId').val();
+		let username = $('#cWriter').val();
+		console.log(content);
+		console.log(bId);
+		console.log(username);
+	
+		$.ajax({
+			  method: "POST",
+			  url: "/comment/write",
+			  data: { bId: bId, cWriter: username, cContent: content }
+		})
+		.done(function( msg ) {
+		    $('#commentListDiv').html(msg);
+		});
+	});
+</script>
 </html>

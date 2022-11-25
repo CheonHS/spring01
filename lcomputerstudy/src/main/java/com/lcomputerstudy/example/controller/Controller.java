@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lcomputerstudy.example.domain.Board;
+import com.lcomputerstudy.example.domain.Comment;
 import com.lcomputerstudy.example.domain.Pagination;
 import com.lcomputerstudy.example.domain.User;
 import com.lcomputerstudy.example.service.BoardService;
+import com.lcomputerstudy.example.service.CommentService;
 import com.lcomputerstudy.example.service.UserService;
 
 @org.springframework.stereotype.Controller
@@ -26,6 +28,7 @@ public class Controller {
 
 	@Autowired UserService userservice;
 	@Autowired BoardService boardservice;
+	@Autowired CommentService commentservice;
 	
 	Pagination pagination = null;
 	
@@ -141,7 +144,11 @@ public class Controller {
 //	public String boardDetail(@RequestParam("bId") String bId, Model model) {
 	public String boardDetail(@ModelAttribute Board board, Model model) {
 		Board row = boardservice.selectBoardRow(board);
+		row.setRownum(board.getRownum());
 		model.addAttribute("row", row);
+		
+		List<Comment> list = commentservice.selectCommentList();
+		model.addAttribute("list", list);
 		return "/board_detail";
 	}
 	
@@ -192,6 +199,18 @@ public class Controller {
 		boardservice.orderUpBoard(board);
 		boardservice.replyBoard(board);
 		return boardDetail(board, model);
+	}
+	
+	//	comment	
+	
+	@RequestMapping(value="/comment/write")
+	public String commentWrite(Comment comment, Model model) {
+		commentservice.writeComment(comment);
+		commentservice.groupUpdateComment(comment);
+		
+		List<Comment> list = commentservice.selectCommentList();
+		model.addAttribute("list", list);
+		return "/ajax_comment";
 	}
 	
 }

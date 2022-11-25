@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcomputerstudy.example.mapper.CommentMapper">
+	<!-- 댓글 목록 -->
+	<select id="selectCommentList" resultType="Comment">
+		SELECT		c_id as cId,
+					b_id as bId,
+					c_content as cContent,
+					c_writer as cWriter,
+					c_datetime as cDateTime,
+					c_group as cGroup,
+					c_order as cOrder,
+					c_depth as cDepth
+					
+		FROM		lc_comment
+	</select>
+	<insert id="writeComment" parameterType="Comment">
+		INSERT INTO lc_comment(
+			b_id,
+			c_content,
+			c_writer,
+			c_group,
+			c_order,
+			c_depth
+		) VALUES (
+			#{bId},
+			#{cContent},
+			#{cWriter},
+			'0',
+	        '1',
+	        '0'
+		)
+		<selectKey resultType="int" keyProperty="cId" order="AFTER">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey> 
+	</insert>
+	<update id="groupUpdateComment" parameterType="Comment">			
+		UPDATE		lc_comment
+		SET			c_group = c_id
+		WHERE		c_id = LAST_INSERT_ID()
+		 
+	</update>
+</mapper>

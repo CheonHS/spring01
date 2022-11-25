@@ -61,7 +61,8 @@
 					<th>작성일</th>
 				</tr>
 				<c:forEach var="list" items="${list }">
-			      	<tr class="bRow" onclick="location.href='/board/detail?bId=${list.bId}'">
+			      	<tr class="bRow"
+			      		onclick="location.href='/board/detail?bId=${list.bId}&rownum=${list.rownum}'">
 			      		<td>${list.rownum }</td>
 			      		<td>
 			      			<c:if test="${list.bDepth ne 0 }">└</c:if>
@@ -95,7 +96,6 @@
 				</c:when>
 			</c:choose>
 		</c:forEach>
-		
 		<c:choose>
 			<c:when test="${ page.nextPage le page.lastPage }">
 				<a href="/board?page=${page.nextPage}">▶</a>
