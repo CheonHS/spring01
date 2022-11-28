@@ -41,15 +41,14 @@
 	}
 	#commentListDiv{
 		border: 1px solid black;
-		width: 800px;
 	}
-	#cContent{
+	#cContent, .commentReplycContent{
 		width: 630px;
 		height: 40px;
 		border: 1px solid black;
 		vertical-align: middle;
 	}
-	#cContent:focus {
+	#cContent:focus, .commentReplycContent:focus {
 		outline: none;
 	}
 	.cContentList{
@@ -94,15 +93,13 @@
 		</tr>
 	</table>
 	<div id="commentWriteDiv" align="left">
-		<form action="/comment/write" method="post">
-			<input type="hidden" name="bId" id="bId" value="${row.bId }">
-			<sec:authorize access="isAuthenticated()">
-				<sec:authentication property="principal" var="principal"/>
-				<input type="hidden" name="cWriter" id="cWriter" value="${principal.username }">
-			</sec:authorize>
-			<textarea name="cContent" id="cContent" rows="2"></textarea>
-			<input type="button" value="등록" id="btnCommentWrite" style="height: 40px;">
-		</form>
+		<input type="hidden" name="bId" id="bId" value="${row.bId }">
+		<sec:authorize access="isAuthenticated()">
+			<sec:authentication property="principal" var="principal"/>
+			<input type="hidden" name="cWriter" id="cWriter" value="${principal.username }">
+		</sec:authorize>
+		<textarea name="cContent" id="cContent" rows="2"></textarea>
+		<input type="button" value="등록" id="btnCommentWrite" style="height: 40px;">
 	</div>
 	<div id="commentListDiv" align="left">
 		<c:if test="${empty list}">댓글이 없습니다.</c:if>
@@ -112,11 +109,33 @@
 		    		<div style="font-size: 0.8em; margin-left:10px; margin-right: 10px; margin-top: 10px;">
 						${list.cWriter } / ${list.cDateTime }
 					</div>
+					<c:if test="${list.cDepth ne 0 }">└</c:if>
+					<c:forEach begin="1" end="${list.cDepth }" step="1">─</c:forEach>
 					<textarea name="cContent" class="cContentList" rows="2" readonly>${list.cContent }</textarea>
-					<input type="button" value="답글" id="btnCommentReply" style="height: 40px;">
-					<input type="button" value="수정" id="btnCommentEdit" style="height: 40px;">
-					<input type="button" value="삭제" id="btnCommentDelete" style="height: 40px;">
-					
+					<input type="button" value="답글" class="btnCommentReplyOpen" style="height: 40px;">
+					<input type="button" value="취소" class="btnCommentReplyCancel" style="height: 40px; display: none;">
+					<sec:authorize access="isAuthenticated()">
+						<sec:authentication property="principal" var="principal"/>
+							<c:if test="${list.cWriter == principal.username}">
+								<input type="button" value="수정" class="btnCommentEdit" style="height: 40px;">
+								<input type="button" value="수정완료" class="btnCommentEditPro" style="height: 40px; display: none;" cId="${list.cId }">
+								<input type="button" value="수정취소" class="btnCommentEditCancel" style="height: 40px; display: none;">
+								
+								<input type="button" value="삭제" class="btnCommentDelete" style="height: 40px;" cId="${list.cId }">
+							</c:if>
+					</sec:authorize>		
+		    	</div>
+		    	<div class="commentReplyDiv" align="left" style="margin-left: 50px; margin-top: 10px; display: none;">
+		    		<input type="hidden" name="bId" class="commentReplybId" value="${row.bId }">
+					<sec:authorize access="isAuthenticated()">
+						<sec:authentication property="principal" var="principal"/>
+						<input type="hidden" name="cWriter" class="commentReplycWriter" value="${principal.username }">
+					</sec:authorize>
+					<textarea name="cContent" class="commentReplycContent" rows="2"></textarea>
+					<input type="button" value="등록" class="btnCommentReply" style="height: 40px;">
+					<input type="hidden" name="cGroup" class="cGroup" value="${list.cGroup }">
+					<input type="hidden" name="cOrder" class="cGroup" value="${list.cOrder }">
+					<input type="hidden" name="cDepth" class="cGroup" value="${list.cDepth }">
 		    	</div>
 	    	</c:forEach>
 	    </c:if>
@@ -124,13 +143,21 @@
 	<a href="/board">목록</a>
 </body>
 <script>
+	//	로그인 확인
+	function loginChk(){
+		let login = $('#cWriter').val();
+		if(login==null){
+			location.href='/login';
+		}
+	};
+	
+	//	댓글 등록
 	$(document).on('click', '#btnCommentWrite', function () {
+		loginChk();
+		
 		let content = $('#cContent').val();
 		let bId = $('#bId').val();
 		let username = $('#cWriter').val();
-		console.log(content);
-		console.log(bId);
-		console.log(username);
 	
 		$.ajax({
 			  method: "POST",
@@ -141,5 +168,128 @@
 		    $('#commentListDiv').html(msg);
 		});
 	});
+
+	// 댓글 답글 창 열기
+	$(document).on('click', '.btnCommentReplyOpen', function () {
+		loginChk();
+		
+		$(this).hide();
+		$(this).next().next().hide();
+		$(this).next().next().next().next().next().hide();
+		
+		$(this).next().show();
+		$(this).parent().next().show();	
+	});
+	
+	//	댓글 답글 창 닫기
+	$(document).on('click', '.btnCommentReplyCancel', function () {
+		loginChk();
+		
+		$(this).hide();
+
+		$(this).prev().show();
+		$(this).next().show();
+		$(this).next().next().next().next().show();
+		
+		$(this).parent().next().hide();	
+	});
+
+	//	댓글 답글 등록
+	$(document).on('click', '.btnCommentReply', function () {
+		loginChk();
+		
+		let content = $(this).prev().val();
+		let bId = $(this).prev().prev().prev().val();
+		let username = $(this).prev().prev().val();
+		let group = $(this).next().val();
+		let order = $(this).next().next().val();
+		let depth = $(this).next().next().next().val();
+		
+		console.log(content);
+		console.log(bId);
+		console.log(username);
+		console.log(group);
+		console.log(order);
+		console.log(depth);
+
+		$.ajax({
+			  method: "POST",
+			  url: "/comment/reply",
+			  data: { bId: bId, cWriter: username, cContent: content,
+				  	  cGroup: group, cOrder: order, cDepth: depth }
+		})
+		.done(function( msg ) {
+		    $('#commentListDiv').html(msg);
+		});
+		
+	});
+	//	댓글 수정 창 열기
+	$(document).on('click', '.btnCommentEdit', function () {
+		loginChk();
+		
+		$(this).hide();
+		$(this).prev().prev().hide();
+		$(this).next().next().next().hide();
+		
+		$(this).next().show();
+		$(this).next().next().show();
+
+		$(this).prev().prev().prev().removeAttr('readonly');
+
+		let content = $(this).prev().prev().prev().val();
+		console.log(content);
+
+		//	댓글 수정 창 닫기
+		$(document).on('click', '.btnCommentEditCancel', function () {
+			console.log(content);
+			
+			$(this).hide();
+			$(this).prev().hide();
+
+			$(this).next().show();
+			$(this).prev().prev().show();
+			$(this).prev().prev().prev().prev().show();
+
+			$(this).prev().prev().prev().prev().prev().attr('readonly', true);
+			$(this).prev().prev().prev().prev().prev().val(content);
+		});
+		
+	});
+	//	댓글 수정
+	$(document).on('click', '.btnCommentEditPro', function () {
+		loginChk();
+		
+		let content = $(this).prev().prev().prev().prev().val();
+		let cId = $(this).attr('cId');
+		
+		$.ajax({
+			  method: "POST",
+			  url: "/comment/edit",
+			  data: { cId: cId, cContent: content }
+		})
+		.done(function( msg ) {
+		    $('#commentListDiv').html(msg);
+		});
+		
+	});
+
+	//	댓글 삭제
+	$(document).on('click', '.btnCommentDelete', function () {
+		loginChk();
+		
+		let cId = $(this).attr('cId');
+		
+		$.ajax({
+			  method: "POST",
+			  url: "/comment/delete",
+			  data: { cId: cId }
+		})
+		.done(function( msg ) {
+		    $('#commentListDiv').html(msg);
+		});
+		
+	});
+
+	
 </script>
 </html>

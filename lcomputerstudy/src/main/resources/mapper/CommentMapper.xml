@@ -13,7 +13,9 @@
 					c_depth as cDepth
 					
 		FROM		lc_comment
+		ORDER BY	c_group desc, c_order asc
 	</select>
+	<!-- 댓글 등록 -->
 	<insert id="writeComment" parameterType="Comment">
 		INSERT INTO lc_comment(
 			b_id,
@@ -34,10 +36,38 @@
         	SELECT LAST_INSERT_ID()
     	</selectKey> 
 	</insert>
+	<!-- 댓글 등록 정렬 -->
 	<update id="groupUpdateComment" parameterType="Comment">			
 		UPDATE		lc_comment
 		SET			c_group = c_id
 		WHERE		c_id = LAST_INSERT_ID()
-		 
 	</update>
+	<!-- 댓글 답글 등록 -->
+	<insert id="replyComment" parameterType="Comment">
+		INSERT INTO lc_comment(
+			b_id,
+			c_content,
+			c_writer,
+			c_group,
+			c_order,
+			c_depth
+		) VALUES (
+			#{bId},
+			#{cContent},
+			#{cWriter},
+			#{cGroup},
+	        #{cOrder}+1,
+	        #{cDepth}+1
+		)
+	</insert>
+	<update id="editComment" parameterType="Comment">
+		UPDATE		lc_comment
+		SET			c_content = #{cContent}
+		WHERE		c_id = #{cId}
+	</update>
+	<delete id="deleteComment" parameterType="Comment">
+		DELETE	
+		FROM	lc_comment
+		WHERE	c_id = #{cId}
+	</delete>
 </mapper>

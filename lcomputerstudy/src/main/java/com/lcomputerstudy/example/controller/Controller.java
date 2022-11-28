@@ -213,4 +213,31 @@ public class Controller {
 		return "/ajax_comment";
 	}
 	
+	@RequestMapping(value="/comment/reply")
+	public String commentReply(Comment comment, Model model) {
+		commentservice.replyComment(comment);
+		
+		List<Comment> list = commentservice.selectCommentList();
+		model.addAttribute("list", list);
+		return "/ajax_comment";
+	}
+	
+	@RequestMapping(value="/comment/edit")
+	public String commentEdit(Comment comment, Model model) {
+		commentservice.editComment(comment);
+		
+		List<Comment> list = commentservice.selectCommentList();
+		model.addAttribute("list", list);
+		return "/ajax_comment";
+	}
+	
+	@RequestMapping(value="/comment/delete")
+	public String commentDelete(Comment comment, Model model) {
+		commentservice.deleteComment(comment);
+		
+		List<Comment> list = commentservice.selectCommentList();
+		model.addAttribute("list", list);
+		return "/ajax_comment";
+	}
+	
 }

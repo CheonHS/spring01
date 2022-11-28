@@ -127,5 +127,7 @@
 		SELECT		COUNT(*)
 		FROM		lc_board
 	</select>
+	
+	
 
 </mapper>

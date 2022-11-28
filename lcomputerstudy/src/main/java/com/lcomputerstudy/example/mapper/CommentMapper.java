@@ -15,4 +15,10 @@ public interface CommentMapper {
 
 	public void groupUpdateComment(Comment comment);
 
+	public void replyComment(Comment comment);
+
+	public void editComment(Comment comment);
+
+	public void deleteComment(Comment comment);
+
 }
