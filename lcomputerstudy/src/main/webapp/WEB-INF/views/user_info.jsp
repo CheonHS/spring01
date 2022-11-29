@@ -45,6 +45,7 @@
 			  data: { username: username, password: password }
 		})
 		.done(function( msg ) {
+			location.href='/user/info';
 		});
 		
 	});
@@ -64,6 +65,7 @@
 			  data: { username: username, password: password }
 		})
 		.done(function( msg ) {
+			location.href='/user/info';
 		});
 		
 	});

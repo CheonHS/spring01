@@ -90,18 +90,22 @@ public class Controller {
 	@RequestMapping(value="/user/levelUp")
 	public String levelUp(@ModelAttribute User user, Model model) {
 		userservice.levelUp(user);
+		
 		Collection<GrantedAuthority> authority = userservice.getAuthorities(user.getUsername());
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), authority));
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), "111" ,authority));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+
 		return "/user_info";
 	}
 	
 	@RequestMapping(value="/user/levelDown")
 	public String levelDown(@ModelAttribute User user, Model model) {
 		userservice.levelDown(user);
+		
 		Collection<GrantedAuthority> authority = userservice.getAuthorities(user.getUsername());
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), authority));
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), "111" ,authority));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+		
 		return "/user_info";
 	}
 
