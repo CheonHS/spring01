@@ -19,10 +19,9 @@
 			</sec:authorize>
 			<sec:authorize access="isAuthenticated()">
 				<a href="/logout">로그아웃</a>
-				<sec:authentication property="principal" var="principal"/>
-				<h2>${principal }</h2>
 			</sec:authorize>
 		</div>
+		<br>
 		<div>
 			<sec:authorize access="isAuthenticated()">
 				<a href="/user/info">내 정보</a>

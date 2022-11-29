@@ -14,6 +14,7 @@
 		SELECT			u_id						as	username,
 						u_password					as	password,
 						u_name						as	uName,
+						u_datetime					as	uDateTime,
 						u_isAccountNonExpired		as	isAccountNonExpired,
 						u_isAccountNonLocked		as	isAccountNonLocked,
 						u_isCredentialNonExpired	as	isCredentialsNonExpired,
@@ -22,6 +23,7 @@
 		WHERE		1=1
 		AND			u_id = #{username}
 	</select>
+	
 	<!-- 회원 등록 -->
 	<insert id="createUser" parameterType="User">
 		INSERT INTO lc_user(
@@ -42,6 +44,7 @@
 	        #{isEnabled}
 		)
 	</insert>
+	
 	<!-- 유저 권한 추가 -->
 	<insert id="createAuthority" parameterType="org.springframework.security.core.GrantedAuthority">
        INSERT INTO lc_auth (
@@ -55,12 +58,7 @@
          UPDATE
             u_id = #{username}
     </insert>
-    <!-- 관리자 권한 설정 -->
-    <update id="levelUp" parameterType="User">
-    	UPDATE		lc_auth
-    	SET			u_auth = 'ROLE_ADMIN'
-    	WHERE		u_id = #{username}
-    </update>
+    
     <!-- 유저 목록 -->
     <select id="selectUserList" parameterType="Pagination" resultType="User">
     	SELECT		ROW_NUMBER()
@@ -74,9 +72,25 @@
 		ORDER BY 	rownum desc
 		LIMIT 		#{pageNum}, #{perPage}
     </select>
+    
     <!-- 유저 개수 -->
     <select id="getCountUser" resultType="int">
     	SELECT 		COUNT(*)
     	FROM		lc_user
     </select>
+    
+    <!-- 관리자 권한 설정 -->
+    <update id="levelUp" parameterType="User">
+    	UPDATE		lc_auth
+    	SET			u_auth = 'ROLE_ADMIN'
+    	WHERE		u_id = #{username}
+    </update>
+    
+     <!-- 관리자 권한 해제 -->
+    <update id="levelDown" parameterType="User">
+    	UPDATE		lc_auth
+    	SET			u_auth = 'ROLE_USER'
+    	WHERE		u_id = #{username}
+    </update>
+    
 </mapper>

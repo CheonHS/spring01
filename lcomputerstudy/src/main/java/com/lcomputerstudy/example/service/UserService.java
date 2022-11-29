@@ -22,12 +22,15 @@ public interface UserService extends UserDetailsService{
 	// 시큐리티 권한 얻기
 	Collection<GrantedAuthority> getAuthorities(String username);
 
-	// 관리자 권한 설정
-	public void levelUp(User user);
-
 	// 유저 목록
 	public List<User> selectUserList(Pagination page);
 
 	public int getCountUser();
+
+	// 관리자 권한 설정
+	public void levelUp(User user);
+
+	// 관리자 권한 해제
+	public void levelDown(User user);
 	
 }

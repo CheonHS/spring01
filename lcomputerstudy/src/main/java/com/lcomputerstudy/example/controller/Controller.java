@@ -1,18 +1,23 @@
 package com.lcomputerstudy.example.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.lcomputerstudy.example.domain.Board;
 import com.lcomputerstudy.example.domain.Comment;
 import com.lcomputerstudy.example.domain.Pagination;
@@ -29,6 +34,7 @@ public class Controller {
 	@Autowired UserService userservice;
 	@Autowired BoardService boardservice;
 	@Autowired CommentService commentservice;
+	@Autowired AuthenticationManager authenticationManager;
 	
 	Pagination pagination = null;
 	
@@ -66,28 +72,39 @@ public class Controller {
 	}
 	
 	@RequestMapping(value="/login")
-		public String beforeLogin(Model model) {
-			return "/login";
+	public String beforeLogin(Model model) {
+		return "/login";
 	}
 
 	@Secured({"ROLE_USER"})
 	@RequestMapping(value="/user/info")
-		public String userInfo(Model model) {
-			return "/user_info";
+	public String userInfo(Model model) {
+		return "/user_info";
 	}
 	
 	@RequestMapping(value="/denied")
-		public String denied(Model model) {
-			return "/denied";
+	public String denied(Model model) {
+		return "/denied";
 	}
 	
 	@RequestMapping(value="/user/levelUp")
-	public String levelUp(@RequestParam("uId") String uId, Model model) {
-		User user = new User();
-		user.setUsername(uId);
+	public String levelUp(@ModelAttribute User user, Model model) {
 		userservice.levelUp(user);
+		Collection<GrantedAuthority> authority = userservice.getAuthorities(user.getUsername());
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), authority));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		return "/user_info";
-}
+	}
+	
+	@RequestMapping(value="/user/levelDown")
+	public String levelDown(@ModelAttribute User user, Model model) {
+		userservice.levelDown(user);
+		Collection<GrantedAuthority> authority = userservice.getAuthorities(user.getUsername());
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), authority));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		return "/user_info";
+	}
+
 	//	admin
 	
 	@Secured({"ROLE_ADMIN"})

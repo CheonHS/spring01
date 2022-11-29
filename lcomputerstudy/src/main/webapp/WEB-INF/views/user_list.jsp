@@ -52,7 +52,7 @@
 					<th>가입일자</th>
 				</tr>
 				<c:forEach var="list" items="${list }">
-			      	<tr class="uRow" onclick="location.href='/admin/userDetail?username=${list.username}'">
+			      	<tr class="uRow">
 			      		<td>${list.rownum }</td>
 			      		<td>${list.username }</td>
 			      		<td>${list.uName }</td>

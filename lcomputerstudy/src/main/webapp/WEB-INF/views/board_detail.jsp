@@ -126,7 +126,7 @@
 					</sec:authorize>		
 		    	</div>
 		    	<div class="commentReplyDiv" align="left" style="margin-left: 50px; margin-top: 10px; display: none;">
-		    		<input type="hidden" name="bId" class="commentReplybId" value="${row.bId }">
+		    		<input type="hidden" name="bId" class="commentReplybId" value="${list.bId }">
 					<sec:authorize access="isAuthenticated()">
 						<sec:authentication property="principal" var="principal"/>
 						<input type="hidden" name="cWriter" class="commentReplycWriter" value="${principal.username }">

@@ -48,12 +48,6 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void levelUp(User user) {
-		userMapper.levelUp(user);
-		
-	}
-
-	@Override
 	public List<User> selectUserList(Pagination page) {
 		return userMapper.selectUserList(page);
 	}
@@ -61,6 +55,17 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int getCountUser() {
 		return userMapper.getCountUser();
+	}
+	
+	@Override
+	public void levelUp(User user) {
+		userMapper.levelUp(user);
+	}
+	
+	@Override
+	public void levelDown(User user) {
+		userMapper.levelDown(user);
+		
 	}
 
 

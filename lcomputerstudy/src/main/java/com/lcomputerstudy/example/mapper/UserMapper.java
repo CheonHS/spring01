@@ -22,13 +22,16 @@ public interface UserMapper {
    // 권한 생성
    public void createAuthority(User user);
 
-   // 관리자 권한 설정
-   public void levelUp(User user);
-
    // 유저 목록
    public List<User> selectUserList(Pagination page);
 
    // 유저 개수
    public int getCountUser();
+
+   // 관리자 권한 설정
+   public void levelUp(User user);
+   
+   // 관리자 권한 해제
+   public void levelDown(User user);
 
 }
