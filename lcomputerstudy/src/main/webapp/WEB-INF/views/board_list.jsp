@@ -31,6 +31,10 @@
 		text-align: center;
 		width: 200px;
 	}
+	select{
+		width: 100px;
+		text-align: center;
+	}
 	.bRow{
 		border-top: 1px solid gray;
 		border-bottom: 1px solid gray;
@@ -42,11 +46,12 @@
 		width: 700px;
 		height: 220px;
 	}
-	#paginationDiv{
+	#paginationDiv, #searchDiv{
 		width: 700px;
 		height: 30px;
 	}
 </style>
+<script src="//code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
 <body>
 	<h1>게시판</h1>
@@ -105,11 +110,24 @@
 			</c:when>
 		</c:choose> 
     </div>
+    <div align="center" id="searchDiv">
+    	<form action="/board">
+    		<input type="hidden" name="page" value="${page.page }">
+	    	<select name="searchType" id="searchType">
+	    		<option value="all">전체</option>
+	    		<option value="title">제목</option>
+	    		<option value="content">내용</option>
+	    		<option value="title+content">제목+내용</option>
+	    		<option value="writer">작성자</option>
+	    	</select>
+	    	<input type="search" name="keyword">
+	    	<input type="submit" value="검색">
+    	</form>
+    </div>
     <br>
 	<a href="/board/write">글 작성</a>
 	
     <br>
     <a href="/">돌아기기</a>
-
 </body>
 </html>

@@ -12,11 +12,23 @@ public class Pagination {
 	public static final int pageUnit=5;  // 한번에 불러 올 pagination 수
 	public static final int perPage=5;   // 한번에 불러 올 userCount 수
 	
+	private String keyword;
+	private String searchType;
+	
 	public Pagination() {
 		count = 0;
 		page = 1;
 	}
 	
+	public Pagination(Pagination pagination) {
+		page = pagination.getPage();
+		count = 0;
+		
+		keyword = pagination.getKeyword();
+		searchType = pagination.getSearchType();
+		
+	}
+
 	public void init() {
 		pageNum = (page-1)*perPage;
 		startPage =((page-1)/pageUnit)*pageUnit+1;
@@ -81,5 +93,18 @@ public class Pagination {
 	public void setNextPage(int nextPage) {
 		this.nextPage = nextPage;
 	}
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+	public String getSearchType() {
+		return searchType;
+	}
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+	
 	
 }

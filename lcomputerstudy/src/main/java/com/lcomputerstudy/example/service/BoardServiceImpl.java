@@ -57,8 +57,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int getCountBoard() {
-		return boardmapper.getCountBoard();
+	public int getCountBoard(Pagination page) {
+		return boardmapper.getCountBoard(page);
 	}
 
 

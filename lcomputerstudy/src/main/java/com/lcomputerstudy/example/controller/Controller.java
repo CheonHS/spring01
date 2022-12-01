@@ -2,7 +2,6 @@ package com.lcomputerstudy.example.controller;
 
 import java.util.Collection;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,8 @@ import com.lcomputerstudy.example.domain.User;
 import com.lcomputerstudy.example.service.BoardService;
 import com.lcomputerstudy.example.service.CommentService;
 import com.lcomputerstudy.example.service.UserService;
+
+
 
 @org.springframework.stereotype.Controller
 public class Controller {
@@ -144,11 +145,9 @@ public class Controller {
 	@RequestMapping(value="/board")
 	public String boardList(@ModelAttribute Pagination page, Model model) {
 		
-		pagination = new Pagination();
-		if(Integer.toString(page.getPage())!="") {
-			pagination.setPage(page.getPage());
-		}
-		pagination.setCount(boardservice.getCountBoard());
+		pagination = new Pagination(page);
+
+		pagination.setCount(boardservice.getCountBoard(pagination));
 		pagination.init();
 		
 		List<Board> list = boardservice.selectBoardList(pagination);
@@ -181,6 +180,7 @@ public class Controller {
 	
 	@RequestMapping(value="/board/writePro")
 	public String boardWritePro(Board board, Model model) {
+		
 		boardservice.writeBoard(board);
 		boardservice.groupUpdateBoard(board);
 		return boardDetail(board, model);
@@ -191,6 +191,7 @@ public class Controller {
 		Board row = new Board();
 		row.setbId(Integer.parseInt(bId));
 		row = boardservice.selectBoardRow(row);
+		
 		model.addAttribute("row", row);
 		return "/board_update";
 	}

@@ -16,6 +16,25 @@
 					b_depth as bDepth
 			
 		FROM 		lc_board
+		WHERE		b_id > 0
+			<if test="searchType == 'all'.toString()">
+					AND b_title LIKE CONCAT('%', #{keyword}, '%')
+					OR	b_content LIKE CONCAT('%', #{keyword}, '%')
+					OR	b_writer LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'title'.toString()">
+					AND b_title LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'content'.toString()">
+					AND b_content LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'title+content'.toString()">
+					AND b_title LIKE CONCAT('%', #{keyword}, '%')
+					OR	b_content LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'writer'.toString()">
+					AND b_writer LIKE CONCAT('%', #{keyword}, '%')
+			</if>
 		ORDER BY 	rownum desc
 		LIMIT 		#{pageNum}, #{perPage}
 	
@@ -123,9 +142,28 @@
 	</insert>
 	
 	<!-- 게시판 개수 -->
-	<select id="getCountBoard" resultType="int">
+	<select id="getCountBoard" parameterType="Pagination" resultType="int">
 		SELECT		COUNT(*)
 		FROM		lc_board
+		WHERE		b_id > 0
+			<if test="searchType == 'all'.toString()">
+					AND b_title LIKE CONCAT('%', #{keyword}, '%')
+					OR	b_content LIKE CONCAT('%', #{keyword}, '%')
+					OR	b_writer LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'title'.toString()">
+					AND b_title LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'content'.toString()">
+					AND b_content LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'title+content'.toString()">
+					AND b_title LIKE CONCAT('%', #{keyword}, '%')
+					OR	b_content LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'writer'.toString()">
+					AND b_writer LIKE CONCAT('%', #{keyword}, '%')
+			</if>
 	</select>
 	
 	

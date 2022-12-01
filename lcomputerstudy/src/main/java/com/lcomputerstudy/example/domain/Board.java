@@ -1,5 +1,7 @@
 package com.lcomputerstudy.example.domain;
 
+import java.io.File;
+
 public class Board {
 	private int bId;
 	private String bTitle;
@@ -12,6 +14,9 @@ public class Board {
 	private int bGroup;
 	private int bOrder;
 	private int bDepth;
+	
+	private File file;
+	private String fileName;
 	
 	public int getbId() {
 		return bId;
@@ -66,6 +71,18 @@ public class Board {
 	}
 	public void setbDepth(int bDeoth) {
 		this.bDepth = bDeoth;
+	}
+	public File getFile() {
+		return file;
+	}
+	public void setFile(File file) {
+		this.file = file;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String string) {
+		this.fileName = string;
 	}
 	
 }

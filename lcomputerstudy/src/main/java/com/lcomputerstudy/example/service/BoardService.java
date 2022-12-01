@@ -30,6 +30,6 @@ public interface BoardService {
 	// 게시판 답글
 	public void replyBoard(Board board);
 
-	public int getCountBoard();
+	public int getCountBoard(Pagination page);
 
 }

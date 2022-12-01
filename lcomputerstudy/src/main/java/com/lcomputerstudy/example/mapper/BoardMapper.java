@@ -23,6 +23,6 @@ public interface BoardMapper {
 	
 	public void replyBoard(Board board);
 
-	public int getCountBoard();
+	public int getCountBoard(Pagination page);
 
 }
