@@ -17,11 +17,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lcomputerstudy.example.domain.Board;
@@ -95,13 +97,26 @@ public class Controller {
 		return "/denied";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/user/levelUp")
-	public String levelUp(@ModelAttribute User user, Model model) {
+	public String levelUp(@ModelAttribute User user, Model model, Authentication authentication) {
 		userservice.levelUp(user);
 		
 		Collection<GrantedAuthority> authority = userservice.getAuthorities(user.getUsername());
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), "111" ,authority));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		
+//		로그인 확인		
+		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), "111" ,authority));
+		
+//		로그아웃
+//		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), authentication.getCredentials().toString() ,authority));
+		
+//		로그아웃
+//		Object pricipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), userDetails.getPassword() ,authority));
+		
+		
+		SecurityContextHolder.getContext().setAuthentication(auth);
 
 		return "/user_info";
 	}
