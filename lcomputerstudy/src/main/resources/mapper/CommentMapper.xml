@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcomputerstudy.example.mapper.CommentMapper">
 	<!-- 댓글 목록 -->
-	<select id="selectCommentList" resultType="Comment">
+	<select id="selectCommentList" parameterType="int" resultType="Comment">
 		SELECT		c_id as cId,
 					b_id as bId,
 					c_content as cContent,
@@ -13,6 +13,7 @@
 					c_depth as cDepth
 					
 		FROM		lc_comment
+		WHERE		b_id = #{bId}
 		ORDER BY	c_group desc, c_order asc
 	</select>
 	<!-- 댓글 등록 -->

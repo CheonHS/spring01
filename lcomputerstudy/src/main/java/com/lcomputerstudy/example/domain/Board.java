@@ -1,7 +1,5 @@
 package com.lcomputerstudy.example.domain;
 
-import java.io.File;
-
 public class Board {
 	private int bId;
 	private String bTitle;
@@ -15,8 +13,10 @@ public class Board {
 	private int bOrder;
 	private int bDepth;
 	
-	private File file;
-	private String fileName;
+	private int fId;
+	private String fileOriginName;
+	private String fileUploadName;
+	
 	
 	public int getbId() {
 		return bId;
@@ -72,17 +72,25 @@ public class Board {
 	public void setbDepth(int bDeoth) {
 		this.bDepth = bDeoth;
 	}
-	public File getFile() {
-		return file;
+	
+	public int getfId() {
+		return fId;
 	}
-	public void setFile(File file) {
-		this.file = file;
+	public void setfId(int fId) {
+		this.fId = fId;
 	}
-	public String getFileName() {
-		return fileName;
+	public String getFileOriginName() {
+		return fileOriginName;
 	}
-	public void setFileName(String string) {
-		this.fileName = string;
+	public void setFileOriginName(String fileOriginName) {
+		this.fileOriginName = fileOriginName;
 	}
+	public String getFileUploadName() {
+		return fileUploadName;
+	}
+	public void setFileUploadName(String fileUploadName) {
+		this.fileUploadName = fileUploadName;
+	}
+	
 	
 }

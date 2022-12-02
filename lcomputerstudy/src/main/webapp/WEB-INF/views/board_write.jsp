@@ -51,7 +51,7 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<input type="file" name="file" multiple>
+				<input type="file" name="file">
 			</td>
 		</tr>
 		<tr>

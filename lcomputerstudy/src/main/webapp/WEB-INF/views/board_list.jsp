@@ -70,8 +70,8 @@
 			      		onclick="location.href='/board/detail?bId=${list.bId}&rownum=${list.rownum}'">
 			      		<td>${list.rownum }</td>
 			      		<td>
+			      			<c:forEach begin="1" end="${list.bDepth }" step="1">&ensp;</c:forEach>
 			      			<c:if test="${list.bDepth ne 0 }">└</c:if>
-			      			<c:forEach begin="1" end="${list.bDepth }" step="1">─</c:forEach>
 			      			${list.bTitle }
 			      		</td>
 			      		<td>${list.bWriter }</td>

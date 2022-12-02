@@ -68,13 +68,19 @@
 	<hr>
 	<table>
 		<tr>
-			<th>${row.rownum }</th>
+			<th><c:if test="${row.rownum ne 0 }">${row.rownum }</c:if> </th>
 			<th>${row.bTitle }</th>
 			<th>${row.bWriter}</th>
 		</tr>
 		<tr>
 			<td colspan="3" id="contentTd">
 				<textarea readonly disabled>${row.bContent }</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<img src="/board/fileDown?fId=${row.fId}" width="150px" height="100px;">
+				<a href="">${row.fileOriginName }</a>
 			</td>
 		</tr>
 		<tr>
@@ -107,10 +113,11 @@
 	    	<c:forEach var="list" items="${list }">
 		    	<div>
 		    		<div style="font-size: 0.8em; margin-left:10px; margin-right: 10px; margin-top: 10px;">
+		    			<c:forEach begin="1" end="${list.cDepth }" step="1">&emsp;</c:forEach>
 						${list.cWriter } / ${list.cDateTime }
 					</div>
+					<c:forEach begin="1" end="${list.cDepth }" step="1">&emsp;</c:forEach>
 					<c:if test="${list.cDepth ne 0 }">└</c:if>
-					<c:forEach begin="1" end="${list.cDepth }" step="1">─</c:forEach>
 					<textarea name="cContent" class="cContentList" rows="2" readonly>${list.cContent }</textarea>
 					<input type="button" value="답글" class="btnCommentReplyOpen" style="height: 40px;">
 					<input type="button" value="취소" class="btnCommentReplyCancel" style="height: 40px; display: none;">

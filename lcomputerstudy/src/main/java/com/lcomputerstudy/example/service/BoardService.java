@@ -31,5 +31,8 @@ public interface BoardService {
 	public void replyBoard(Board board);
 
 	public int getCountBoard(Pagination page);
+	
+	//	파일 등록
+	public void addBoardFile(Board board);
 
 }

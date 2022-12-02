@@ -1,11 +1,12 @@
 package com.lcomputerstudy.example.service;
 
 import java.util.List;
+
 import com.lcomputerstudy.example.domain.Comment;
 
 public interface CommentService {
 
-	public List<Comment> selectCommentList();
+	public List<Comment> selectCommentList(int bId);
 
 	public void writeComment(Comment comment);
 

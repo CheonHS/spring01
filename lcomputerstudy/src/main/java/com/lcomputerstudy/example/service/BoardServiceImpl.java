@@ -61,6 +61,12 @@ public class BoardServiceImpl implements BoardService {
 		return boardmapper.getCountBoard(page);
 	}
 
+	@Override
+	public void addBoardFile(Board board) {
+		boardmapper.addBoardFile(board);
+		
+	}
+
 
 	
 }

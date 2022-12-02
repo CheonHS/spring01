@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lcomputerstudy.example.domain.Board;
 import com.lcomputerstudy.example.domain.Comment;
 import com.lcomputerstudy.example.mapper.CommentMapper;
 
@@ -15,8 +16,8 @@ public class CommentServiceImpl implements CommentService {
 	CommentMapper commentMapper;
 
 	@Override
-	public List<Comment> selectCommentList() {
-		return commentMapper.selectCommentList();
+	public List<Comment> selectCommentList(int bId) {
+		return commentMapper.selectCommentList(bId);
 	}
 
 	@Override

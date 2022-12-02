@@ -1,7 +1,12 @@
 package com.lcomputerstudy.example.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.lcomputerstudy.example.domain.Board;
 import com.lcomputerstudy.example.domain.Comment;
 import com.lcomputerstudy.example.domain.Pagination;
@@ -161,14 +168,16 @@ public class Controller {
 	}
 	
 	@RequestMapping(value="/board/detail")
-//	public String boardDetail(@RequestParam("bId") String bId, Model model) {
 	public String boardDetail(@ModelAttribute Board board, Model model) {
 		Board row = boardservice.selectBoardRow(board);
 		row.setRownum(board.getRownum());
 		model.addAttribute("row", row);
 		
-		List<Comment> list = commentservice.selectCommentList();
+		List<Comment> list = commentservice.selectCommentList(board.getbId());
 		model.addAttribute("list", list);
+		
+		
+		
 		return "/board_detail";
 	}
 	
@@ -179,10 +188,40 @@ public class Controller {
 	}
 	
 	@RequestMapping(value="/board/writePro")
-	public String boardWritePro(Board board, Model model) {
+	public String boardWritePro(Board board, @RequestParam("file") MultipartFile file,Model model, HttpServletRequest request){
 		
 		boardservice.writeBoard(board);
 		boardservice.groupUpdateBoard(board);
+		
+		if(!file.isEmpty()) {
+			board.setFileOriginName(file.getOriginalFilename());
+			board.setFileUploadName(board.getbId() + "_" + board.getbWriter() + "_" + file.getOriginalFilename());
+			String path = request.getServletContext().getRealPath("/fileUpload");
+			System.out.println(path);
+			File Folder = new File(path);
+			if (!Folder.exists()) {
+				try{
+				    Folder.mkdir(); //폴더 생성합니다.
+				    System.out.println("폴더가 생성되었습니다.");
+			        } 
+			    catch(Exception e){
+				    e.getStackTrace();
+				}        
+		    }else {
+				System.out.println("이미 폴더가 생성되어 있습니다.");
+			}
+			
+			String fullPath =  path + "/" + board.getFileUploadName();
+			try {
+				file.transferTo(new File(fullPath));
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			boardservice.addBoardFile(board);
+		}
+	
 		return boardDetail(board, model);
 	}
 	
@@ -222,6 +261,14 @@ public class Controller {
 		boardservice.replyBoard(board);
 		return boardDetail(board, model);
 	}
+	@RequestMapping(value="/board/fileDown")
+	public String boardFileDown(Board board, Model model, HttpServletRequest request) {
+		String path = "";
+		return boardDetail(board, model);
+	}
+	
+	
+	
 	
 	//	comment	
 	
@@ -230,7 +277,7 @@ public class Controller {
 		commentservice.writeComment(comment);
 		commentservice.groupUpdateComment(comment);
 		
-		List<Comment> list = commentservice.selectCommentList();
+		List<Comment> list = commentservice.selectCommentList(comment.getbId());
 		model.addAttribute("list", list);
 		return "/ajax_comment";
 	}
@@ -239,7 +286,7 @@ public class Controller {
 	public String commentReply(Comment comment, Model model) {
 		commentservice.replyComment(comment);
 		
-		List<Comment> list = commentservice.selectCommentList();
+		List<Comment> list = commentservice.selectCommentList(comment.getbId());
 		model.addAttribute("list", list);
 		return "/ajax_comment";
 	}
@@ -248,7 +295,7 @@ public class Controller {
 	public String commentEdit(Comment comment, Model model) {
 		commentservice.editComment(comment);
 		
-		List<Comment> list = commentservice.selectCommentList();
+		List<Comment> list = commentservice.selectCommentList(comment.getbId());
 		model.addAttribute("list", list);
 		return "/ajax_comment";
 	}
@@ -257,7 +304,7 @@ public class Controller {
 	public String commentDelete(Comment comment, Model model) {
 		commentservice.deleteComment(comment);
 		
-		List<Comment> list = commentservice.selectCommentList();
+		List<Comment> list = commentservice.selectCommentList(comment.getbId());
 		model.addAttribute("list", list);
 		return "/ajax_comment";
 	}

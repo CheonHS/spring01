@@ -70,9 +70,14 @@
 					ta.b_datetime as bDateTime,
 					ta.b_group as bGroup,
 					ta.b_order as bOrder,
-					ta.b_depth as bDepth
-		FROM		lc_board ta
-		WHERE		ta.b_id = #{bId}
+					ta.b_depth as bDepth,
+					
+					tb.f_id			as fId,
+					tb.f_originname as fileOriginName,
+					tb.f_uploadname as fileUploadName
+					
+		FROM		lc_board ta, lc_boardfile tb
+		WHERE		ta.b_id = #{bId} AND ta.b_id = tb.b_id
 	</select>
 	
 	<!-- 게시판 작성 -->
@@ -118,7 +123,7 @@
 	<update id="orderUpBoard" parameterType="Board">
 		UPDATE		lc_board
 		SET			b_order = b_order+1
-		WHERE 		b_group = #{bGroup} AND b_order != '1' AND	b_order != #{bOrder}
+		WHERE 		b_group = #{bGroup} AND b_order > #{bOrder}
 	</update>
 	<insert id="replyBoard" parameterType="Board">
 		INSERT INTO lc_board(
@@ -166,6 +171,19 @@
 			</if>
 	</select>
 	
+	<!-- 게시판 파일 등록 -->
+	<insert id="addBoardFile" parameterType="Board">
+		INSERT INTO lc_boardfile(
+			b_id,
+			f_originname,
+			f_uploadname
+		) VALUES (
+			#{bId},
+			#{fileOriginName},
+			#{fileUploadName}
+		)
+	
+	</insert>
 	
 
 </mapper>

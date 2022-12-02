@@ -6,10 +6,11 @@
    	<c:forEach var="list" items="${list }">
     	<div>
     		<div style="font-size: 0.8em; margin-left:10px; margin-right: 10px; margin-top: 10px;">
+    			<c:forEach begin="1" end="${list.cDepth }" step="1">&emsp;</c:forEach>
 				${list.cWriter } / ${list.cDateTime }
 			</div>
+			<c:forEach begin="1" end="${list.cDepth }" step="1">&emsp;</c:forEach>
 			<c:if test="${list.cDepth ne 0 }">└</c:if>
-			<c:forEach begin="1" end="${list.cDepth }" step="1">─</c:forEach>
 			<textarea name="cContent" class="cContentList" rows="2" readonly>${list.cContent }</textarea>
 			<input type="button" value="답글" class="btnCommentReplyOpen" style="height: 40px;">
 			<input type="button" value="취소" class="btnCommentReplyCancel" style="height: 40px; display: none;">

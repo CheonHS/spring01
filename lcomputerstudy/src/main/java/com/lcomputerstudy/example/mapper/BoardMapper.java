@@ -25,4 +25,6 @@ public interface BoardMapper {
 
 	public int getCountBoard(Pagination page);
 
+	public void addBoardFile(Board board);
+
 }
